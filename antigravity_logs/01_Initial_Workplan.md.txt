@@ -1,0 +1,363 @@
+# Action Flow Implementation Plan
+
+Action Flow is an Agentic AI System that ingests unstructured business content, extracts insights, analyzes impact, generates prioritized action recommendations, simulates execution, and shows before and after outcomes.
+
+## System Architecture
+
+```mermaid
+graph TB
+    subgraph Mobile["React Native App (APK)"]
+        UI[Dashboard UI]
+        Upload[Content Upload]
+        Results[Results Viewer]
+        Sim[Simulation Viewer]
+    end
+
+    subgraph Backend["FastAPI Backend"]
+        API[REST API Layer]
+        Ingest[Ingestion Engine]
+        Agents[Agentic Pipeline]
+        Sim_Engine[Simulation Engine]
+    end
+
+    subgraph AI["Gemini API"]
+        LLM["gemini-2.5-flash"]
+    end
+
+    Upload -->|"POST /analyze"| API
+    API --> Ingest
+    Ingest -->|"Parse and Chunk"| Agents
+    Agents -->|"Structured Output"| LLM
+    LLM -->|"Insights and Actions"| Agents
+    Agents --> Sim_Engine
+    Sim_Engine -->|"Mock CRM/Email/Slack"| Sim_Engine
+    API -->|"JSON Response"| Results
+    API -->|"Simulation Logs"| Sim
+```
+
+### Agentic Pipeline (Plan, Execute, Analyze Loop)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant API as FastAPI
+    participant P as Planner Agent
+    participant E as Extractor Agent
+    participant A as Analyzer Agent
+    participant R as Recommender Agent
+    participant S as Simulator Agent
+
+    User->>API: Upload content
+    API->>P: Route to Planner
+    P->>P: Classify content type and plan extraction strategy
+    P->>E: Dispatch extraction task
+    E->>E: Call Gemini to extract entities and metrics
+    E->>A: Pass structured insights
+    A->>A: Call Gemini to score impact and identify risks
+    A->>R: Pass analysis results
+    R->>R: Call Gemini to generate prioritized actions
+    R->>S: Pass action recommendations
+    S->>S: Simulate each action
+    S->>API: Return full pipeline result
+    API->>User: Insights, Actions, and Simulated Outcomes
+```
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Gemini API Key**: A valid `GEMINI_API_KEY` is required. The plan uses `gemini-2.5-flash` for speed and cost efficiency.
+
+> [!IMPORTANT]
+> **React Native APK Build**: Building an APK requires either EAS Build or a manual Gradle build. Confirm the preferred build approach.
+
+> [!WARNING]
+> **Scope**: The simulation engine uses mock API calls. The before and after outcomes are AI projected.
+
+## Open Questions
+
+> [!IMPORTANT]
+> 1. Is a Gemini API key available?
+> 2. Are Node.js, Expo CLI, and Android SDK installed for the React Native environment?
+> 3. Should the FastAPI backend run locally or be deployed to the cloud?
+> 4. Should synthetic sample data be generated, or will real data be provided?
+> 5. Is a signed release APK required, or is a debug APK sufficient?
+
+## Project Structure
+
+```text
+c:\ActionFlow AI\
+├── backend\
+│   ├── app\
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── config.py
+│   │   ├── api\
+│   │   │   ├── __init__.py
+│   │   │   └── v1\
+│   │   │       ├── __init__.py
+│   │   │       ├── router.py
+│   │   │       └── endpoints\
+│   │   │           ├── __init__.py
+│   │   │           ├── analyze.py
+│   │   │           ├── status.py
+│   │   │           └── health.py
+│   │   ├── schemas\
+│   │   │   ├── __init__.py
+│   │   │   ├── request.py
+│   │   │   └── response.py
+│   │   ├── agents\
+│   │   │   ├── __init__.py
+│   │   │   ├── pipeline.py
+│   │   │   ├── planner.py
+│   │   │   ├── extractor.py
+│   │   │   ├── analyzer.py
+│   │   │   ├── recommender.py
+│   │   │   └── simulator.py
+│   │   ├── services\
+│   │   │   ├── __init__.py
+│   │   │   ├── gemini_client.py
+│   │   │   ├── file_parser.py
+│   │   │   └── mock_integrations.py
+│   │   └── utils\
+│   │       ├── __init__.py
+│   │       └── helpers.py
+│   ├── tests\
+│   │   └── test_pipeline.py
+│   ├── sample_data\
+│   │   ├── sales_report.txt
+│   │   ├── quarterly_data.csv
+│   │   └── industry_news.txt
+│   ├── requirements.txt
+│   ├── .env.example
+│   └── README.md
+│
+├── mobile\
+│   ├── app\
+│   │   ├── _layout.tsx
+│   │   ├── index.tsx
+│   │   ├── upload.tsx
+│   │   ├── results.tsx
+│   │   └── simulation.tsx
+│   ├── components\
+│   │   ├── InsightCard.tsx
+│   │   ├── ActionCard.tsx
+│   │   ├── SimulationTimeline.tsx
+│   │   ├── BeforeAfterChart.tsx
+│   │   └── LoadingAgent.tsx
+│   ├── services\
+│   │   └── api.ts
+│   ├── constants\
+│   │   └── theme.ts
+│   ├── assets\
+│   ├── app.json
+│   ├── eas.json
+│   ├── package.json
+│   └── tsconfig.json
+│
+└── README.md
+```
+
+## Proposed Changes
+
+### Component 1: Backend Foundation
+
+#### [NEW] requirements.txt
+Dependencies:
+* `fastapi>=0.115.0`
+* `uvicorn[standard]>=0.30.0`
+* `google-genai>=1.0.0`
+* `pydantic>=2.0`
+* `pydantic-settings>=2.0`
+* `python-multipart>=0.0.9`
+* `pandas>=2.0`
+* `python-dotenv>=1.0`
+* `httpx>=0.27`
+
+#### [NEW] config.py
+* `Settings` class using `pydantic-settings` for `GEMINI_API_KEY`, `GEMINI_MODEL`, `API_HOST`, `API_PORT`
+* Load from `.env` file
+
+#### [NEW] main.py
+* FastAPI app initialization with CORS middleware
+* Include v1 router
+* Startup and shutdown lifecycle events
+* Health check at root
+
+### Component 2: API Layer
+
+#### [NEW] request.py
+Pydantic models:
+* `AnalyzeRequest`: `content: str`, `content_type: Literal["sales_report", "news", "csv", "mixed"]`, `context: Optional[str]`
+* `FileUploadRequest`: For multipart file uploads
+
+#### [NEW] response.py
+Pydantic models:
+* `Insight`: `title`, `description`, `category`, `confidence_score`, `source_snippet`
+* `ImpactAnalysis`: `risk_level`, `opportunity_score`, `revenue_impact`, `urgency`
+* `ActionRecommendation`: `priority: int`, `title`, `description`, `action_type`, `expected_outcome`, `effort_level`
+* `SimulationResult`: `action_title`, `simulated_service`, `status`, `mock_response`, `timestamp`
+* `BeforeAfterOutcome`: `metric`, `before_value`, `after_value`, `change_pct`, `explanation`
+* `FullAnalysisResponse`: Combines all of the above into the pipeline output
+
+#### [NEW] analyze.py
+* `POST /api/v1/analyze` accepts text content or file upload, runs the full agentic pipeline, returns `FullAnalysisResponse`
+* `POST /api/v1/analyze/file` accepts file upload
+* `GET /api/v1/analyze/{job_id}/status` check pipeline status
+
+### Component 3: Agentic Pipeline
+
+#### [NEW] gemini_client.py
+* Wraps `google.genai.Client`
+* `async def generate_structured(prompt, schema)` calls Gemini with `response_mime_type="application/json"` and Pydantic `response_schema`
+* Handles retries and error mapping
+
+#### [NEW] planner.py
+Planner Agent classifies input content:
+* Detects content type
+* Identifies key entities and metrics present
+* Creates an extraction plan
+* Output: `ExtractionPlan` Pydantic model
+
+#### [NEW] extractor.py
+Extractor Agent pulls structured insights from raw content:
+* Prompt: Extract key business insights, metrics, trends, and signals from this content
+* Uses Gemini structured output to return `list[Insight]`
+* Handles CSV data by converting to natural language summary first
+
+#### [NEW] analyzer.py
+Analyzer Agent evaluates business impact:
+* Takes extracted insights as input
+* Prompt: Analyze the business impact of these insights. Score risk, opportunity, revenue impact
+* Output: `ImpactAnalysis` per insight
+* Identifies cross-cutting themes and correlations
+
+#### [NEW] recommender.py
+Recommender Agent generates prioritized actions:
+* Takes insights and impact analysis as input
+* Prompt: Generate 3 to 5 prioritized action recommendations
+* Each action has priority rank, description, expected outcome, effort level, action type
+* Output: `list[ActionRecommendation]`
+
+#### [NEW] simulator.py
+Simulator Agent mock executes each action:
+* For each recommendation, simulates the appropriate integration
+* CRM Update mock Salesforce API call with response
+* Email Outreach mock SendGrid API call
+* Slack Notification mock Slack webhook
+* Strategy Document mock Google Docs creation
+* Generates before and after projections using Gemini
+* Output: `list[SimulationResult]` and `list[BeforeAfterOutcome]`
+
+#### [NEW] pipeline.py
+Orchestrator runs the full Plan, Extract, Analyze, Recommend, Simulate loop:
+* Accepts raw input
+* Calls each agent sequentially, passing outputs downstream
+* Includes timing and logging for each stage
+* Returns `FullAnalysisResponse`
+
+#### [NEW] mock_integrations.py
+Mock service responses:
+* `mock_crm_update()` returns fake Salesforce response JSON
+* `mock_send_email()` returns fake SendGrid response
+* `mock_slack_notify()` returns fake Slack webhook response
+* `mock_create_document()` returns fake Google Docs link
+* Each includes realistic latency simulation
+
+#### [NEW] file_parser.py
+* `parse_csv(file)` reads CSV with pandas, converts to text summary
+* `parse_text(file)` reads plain text files
+* `detect_content_type(content)` heuristic detection
+
+### Component 4: Sample Data
+
+#### [NEW] sales_report.txt
+Synthetic quarterly sales report with realistic metrics, team performance, regional breakdown, and pipeline data.
+
+#### [NEW] quarterly_data.csv
+CSV with columns Month, Region, Revenue, Deals Closed, Pipeline Value, Win Rate, Churn Rate.
+
+#### [NEW] industry_news.txt
+Collection of synthetic industry news snippets about market trends, competitor moves, regulatory changes.
+
+### Component 5: React Native Mobile App
+
+#### [NEW] Expo project initialization
+```bash
+npx -y create-expo-app@latest ./ --template tabs
+```
+
+#### [NEW] theme.ts
+Design system:
+* Dark mode primary with gradient accents
+* Typography: Inter font family
+* Spacing scale, border radius tokens
+* Card styles with glassmorphism effects
+
+#### [NEW] api.ts
+* `analyzeContent(content, contentType)` calls `POST /api/v1/analyze`
+* `uploadFile(file)` calls `POST /api/v1/analyze/file`
+* `getStatus(jobId)` polls status endpoint
+* Base URL configurable via env
+
+#### [NEW] index.tsx
+Dashboard:
+* Hero section with app branding
+* Quick action buttons for pasting content, uploading file, trying sample
+* Recent analysis history
+* Animated gradient background
+
+#### [NEW] upload.tsx
+Upload Screen:
+* Text input area for pasting content
+* File picker for CSV and TXT files
+* Content type selector
+* Analyze call to action button with loading state
+* Agent progress indicator
+
+#### [NEW] results.tsx
+Results Screen:
+* Insights section cards showing extracted insights with confidence scores
+* Impact analysis visual risk and opportunity matrix
+* Action recommendations numbered priority list with effort badges
+* Animated entrance transitions
+
+#### [NEW] simulation.tsx
+Simulation Screen:
+* Simulation timeline step by step log of mock executions with status indicators
+* Before and After side by side comparison cards with animated metric changes
+* Mock responses expandable cards showing simulated API responses
+* Export and share results button
+
+#### [NEW] UI Components
+* `InsightCard.tsx` Glassmorphic card with category icon, confidence bar
+* `ActionCard.tsx` Priority ranked card with effort badge and action type icon
+* `SimulationTimeline.tsx` Vertical timeline with animated steps
+* `BeforeAfterChart.tsx` Metric comparison with animated number transitions
+* `LoadingAgent.tsx` Agent pipeline progress visualization
+
+## Verification Plan
+
+### Automated Tests
+```bash
+python -m pytest tests/ -v
+
+uvicorn app.main:app --reload
+curl -X POST http://localhost:8000/api/v1/analyze -H "Content-Type: application/json" -d '{"content": "...", "content_type": "sales_report"}'
+```
+
+### Manual Verification
+* Run the full pipeline with each of the sample data types
+* Verify Gemini returns properly structured JSON responses
+* Test the mobile app on Android emulator or physical device
+* Verify all agent stages produce meaningful output
+* Check before and after comparison accuracy
+* Build and install APK on a device
+
+### Demo Readiness Checklist
+* [ ] Backend runs and responds to API calls
+* [ ] All agents produce structured output
+* [ ] Mobile app connects to backend successfully
+* [ ] Upload to Results to Simulation flow works
+* [ ] Before and after outcomes render correctly
+* [ ] APK installs and runs on Android device
+* [ ] Sample data produces valid demo results

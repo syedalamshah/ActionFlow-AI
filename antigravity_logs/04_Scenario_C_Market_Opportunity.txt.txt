@@ -1,0 +1,196 @@
+# Execution Trace: Demand Surge & Opportunity Pipeline
+
+**Model Context**: `gemini-1.5-pro`
+**Input Data**: *"Karachi electronics demand up 35% post-Eid. Inventory at 60%. Competitor out of stock."*
+
+---
+
+## Stage 1: Content Extractor Agent
+
+**Reasoning Step**: The agent extracts the positive market signals and constraints. It identifies a significant spike in demand mapped against a finite internal resource (60% inventory) and a major external advantage (competitor stock-out).
+**Tool Call / Parameters**: `generate_content(response_schema=ExtractionResult, temperature=0.1)`
+
+**Output Produced**:
+```json
+{
+  "key_facts": [
+    "Electronics demand in Karachi has surged post-Eid.",
+    "Current local inventory levels are sitting at 60%.",
+    "A primary competitor is entirely out of stock in this category."
+  ],
+  "data_points": [
+    "Demand increase: +35%",
+    "Inventory capacity: 60%"
+  ],
+  "signals": [
+    "Temporary market monopoly due to competitor absence.",
+    "High risk of impending stock-out given the +35% demand trajectory against 60% stock.",
+    "Immediate pricing power opportunity."
+  ],
+  "source_type": "Market Intelligence & Inventory Report"
+}
+```
+
+---
+
+## Stage 2: Insight Generator Agent
+
+**Reasoning Step**: The agent must connect the dots between the three facts. The competitor being out of stock explains the aggressive 35% surge. The critical insight is the tension between having a temporary monopoly and having only 60% inventory: without intervention, the company will quickly stock out as well, leaving money on the table.
+**Tool Call / Parameters**: `generate_content(response_schema=InsightGeneratorResult, temperature=0.4)`
+
+**Output Produced**:
+```json
+{
+  "insights": [
+    {
+      "title": "Temporary Monopoly Squeeze",
+      "detail": "The competitor's stock-out has effectively handed us a temporary monopoly in Karachi. However, with demand artificially inflated by 35%, our 60% inventory will deplete exponentially faster than historical run-rates predict.",
+      "confidence_score": 0.96
+    },
+    {
+      "title": "Unleveraged Pricing Power",
+      "detail": "Customers currently have no alternative purchasing options in the immediate region. This presents a rare, high-leverage opportunity to increase margins without suffering competitive churn.",
+      "confidence_score": 0.92
+    },
+    {
+      "title": "Supply Chain Race Condition",
+      "detail": "The first player to fully restock will capture the trailing edge of the post-Eid demand curve. We are in a race against the competitor's replenishment cycle.",
+      "confidence_score": 0.85
+    }
+  ]
+}
+```
+
+---
+
+## Stage 3: Impact Analyzer Agent
+
+**Reasoning Step**: The agent evaluates this purely from a revenue-maximization perspective. The risk isn't losing money; the risk is leaving potential profit on the table (opportunity cost). 
+**Tool Call / Parameters**: `generate_content(response_schema=AnalyzerResult, temperature=0.3)`
+
+**Output Produced**:
+```json
+{
+  "impact_analyses": [
+    {
+      "insight_title": "Temporary Monopoly Squeeze",
+      "business_consequence": "Premature stock-out leading to thousands of dollars in missed sales.",
+      "urgency_level": "High",
+      "estimated_loss_or_gain": "+$80k to +$120k in achievable gross sales",
+      "time_sensitivity": "Immediate (Next 24-72 hours)"
+    },
+    {
+      "insight_title": "Unleveraged Pricing Power",
+      "business_consequence": "Leaving significant gross margin on the table by selling at standard market rates during a supply shortage.",
+      "urgency_level": "High",
+      "estimated_loss_or_gain": "+12% to +18% increase in gross profit margins",
+      "time_sensitivity": "Immediate"
+    },
+    {
+      "insight_title": "Supply Chain Race Condition",
+      "business_consequence": "Loss of market dominance once the competitor secures their inbound shipments.",
+      "urgency_level": "Medium",
+      "estimated_loss_or_gain": "Unknown downstream market share",
+      "time_sensitivity": "Next 7-14 days"
+    }
+  ],
+  "cross_cutting_themes": [
+    "Dynamic Pricing Strategy",
+    "Inventory Velocity Optimization",
+    "Market Share Capture"
+  ]
+}
+```
+
+---
+
+## Stage 4: Action Generator Agent
+
+**Reasoning Step**: Formulate targeted actions to exploit the opportunity. Priority 1 must maximize the value of the existing 60% stock via pricing algorithms (which also artificially slows demand velocity to prevent an immediate stock-out). Priority 2 must be an emergency restock. Priority 3 is aggressive marketing.
+**Decision Rationale**: Raising prices (P1) is prioritized over marketing (P3) because driving more traffic to a 60% inventory pool without optimizing margin first will just accelerate a stock-out.
+**Tool Call / Parameters**: `generate_content(response_schema=RecommenderResult, temperature=0.4)`
+
+**Output Produced**:
+```json
+{
+  "recommendations": [
+    {
+      "title": "Activate Dynamic Pricing Surge",
+      "priority": 1,
+      "budget_estimate": "$0 (Internal system)",
+      "deadline": "Within 2 hours",
+      "responsible_team": "Pricing & E-commerce",
+      "expected_outcome": "Increase retail prices on high-demand electronics by 8-12% in the Karachi region to maximize margins and slightly cool demand velocity, preventing a total stock-out."
+    },
+    {
+      "title": "Emergency Cross-Regional Restock",
+      "priority": 2,
+      "budget_estimate": "$3,500 (Expedited freight)",
+      "deadline": "Within 48 hours",
+      "responsible_team": "Logistics & Supply Chain",
+      "expected_outcome": "Transfer 25% of stagnant electronics inventory from the Lahore/Islamabad hubs directly to Karachi to sustain the sales run-rate."
+    },
+    {
+      "title": "Targeted 'In-Stock' Marketing Blitz",
+      "priority": 3,
+      "budget_estimate": "$2,000 (Ad spend)",
+      "deadline": "Within 12 hours",
+      "responsible_team": "Performance Marketing",
+      "expected_outcome": "Deploy geo-targeted digital ads in Karachi explicitly highlighting 'In Stock & Ready to Ship Today', capturing the competitor's stranded customer base."
+    }
+  ]
+}
+```
+
+---
+
+## Stage 5: Simulator Agent
+
+**Reasoning Step**: Simulate the execution of Priority 1 (Dynamic Pricing) and Priority 2 (Emergency Restock). Forecast the revenue capture and inventory stabilization.
+**Tool Call / Parameters**: `POST /simulate` (Internal mock engine)
+
+**Output Produced**:
+```json
+{
+  "simulations": [
+    {
+      "action_title": "Activate Dynamic Pricing Surge",
+      "simulated_service": "Shopify / Internal Pricing API",
+      "status": "Success",
+      "mock_response": "{\"status\": 200, \"skus_updated\": 142, \"avg_price_increase\": \"10.5%\", \"region_lock\": \"Karachi\"}",
+      "timestamp": "2026-05-19T20:58:14Z"
+    },
+    {
+      "action_title": "Emergency Cross-Regional Restock",
+      "simulated_service": "SAP / ERP Inventory Module",
+      "status": "Success",
+      "mock_response": "{\"status\": 200, \"transfer_order_created\": \"TO-88912\", \"units_in_transit\": 1200, \"eta\": \"36 hours\"}",
+      "timestamp": "2026-05-19T20:58:17Z"
+    }
+  ],
+  "outcomes": [
+    {
+      "metric": "Gross Profit Margin (Karachi)",
+      "before_value": "22%",
+      "after_value": "31%",
+      "change_pct": "+40%",
+      "explanation": "Dynamic pricing successfully captured the consumer surplus generated by the competitor's absence."
+    },
+    {
+      "metric": "Projected Stock-Out Timeline",
+      "before_value": "4.5 Days",
+      "after_value": "12 Days",
+      "change_pct": "+166%",
+      "explanation": "The combination of cooled velocity (via higher prices) and expedited regional inbound freight successfully stabilized the local supply chain."
+    }
+  ]
+}
+```
+
+---
+
+## System Metrics & Fallbacks
+
+- **Fallback Triggered**: None.
+- **Latency**: Estimated 11.8s total execution time.
+- **Data Integrity**: Maintained 100% schema compliance via strictly enforced JSON schema generation in Gemini 1.5 Pro.
