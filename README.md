@@ -79,3 +79,66 @@ The project workspace is cleanly organized to separate production code from eval
 | 📄 `index.html` | The high-fidelity, interactive, zero-dependency Mobile Simulator Hub for instant evaluation. |
 | 📦 `antigravity_logs.zip` | The mandatory Multi-Agent Trace Package. Houses the raw LLM execution traces and reasoning steps for all pipeline simulations. |
 | 📄 `README.md` | This official submission documentation file. |
+
+---
+
+## Security & Credentials
+
+- **Immediate Action:** Rotate any exposed API keys (the repository previously contained a secret in `backend/.env`). Treat any exposed key as compromised and revoke/regenerate it immediately.
+- **Rotation Steps:**
+    1. Regenerate the key in the provider console (Google Cloud / Gemini dashboard).
+    2. Update your local `backend/.env` with the new value (do not commit the file).
+    3. Add the new key to your CI/CD secrets (e.g. GitHub Actions Secrets, Azure DevOps variable groups).
+    4. Deploy or re-run CI to confirm the service reads the secret from the environment.
+- **Remove the secret from git history (optional, advanced):**
+    - Use `git filter-repo` or the BFG Repo-Cleaner to purge the secret from history. Example (requires installing `git-filter-repo`):
+
+```bash
+# remove file from all commits and rewrite history
+git filter-repo --invert-paths --paths backend/.env
+# force-push rewritten history to remote (coordinate with collaborators!)
+git push --force origin main
+```
+
+Or with BFG (simpler for single-file removal):
+
+```bash
+bfg --delete-files backend/.env
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+git push --force origin main
+```
+
+- **Do not commit secrets:** Keep `backend/.env` listed in `.gitignore` and use `backend/.env.example` as the template in the repo.
+- **Secret scanning:** Run a local secret scan before publishing, e.g. `gitleaks detect` or GitHub's secret scanning alerts.
+
+## Secure Publishing & CI Secrets
+
+- **CI Secrets Usage:** Store sensitive keys in your CI provider and reference them at runtime. For GitHub Actions, add the secret via the repository Settings → Secrets → Actions, then reference it in workflows:
+
+```yaml
+env:
+    GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Use Python
+                uses: actions/setup-python@v4
+            - name: Run backend tests
+                run: |
+                    python -m pip install -r backend/requirements.txt
+                    pytest backend/tests
+                env:
+                    GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+```
+
+- **Pre-publish checklist:**
+    - **Rotate** any compromised credentials (do this first).
+    - **Verify** `backend/.env` is in `.gitignore` and only `backend/.env.example` is committed.
+    - **Scan** repository with `gitleaks` or GitHub secret scanning.
+    - **Optional:** Purge the secret from git history if required, and communicate history rewrite to collaborators.
+
+---
+

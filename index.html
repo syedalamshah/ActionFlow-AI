@@ -12,8 +12,8 @@
     --success: #00D68F;
     --warning: #FFAA00;
     --error: #FF4757;
-    --text-main: #F0F0F5;
-    --text-muted: #9BA1B7;
+    --text-main: #FFFFFF;
+    --text-muted: #A0AAB5;
     --border: #2A2E3B;
   }
 
@@ -59,7 +59,7 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    padding: 50px 20px 20px;
+    padding: 90px 20px 20px;
     overflow-y: auto;
     color: var(--text-main);
   }
@@ -74,88 +74,95 @@
   }
 
   /* Typography & Basics */
-  h1 { font-size: 24px; margin: 0 0 5px 0; }
-  p.subtitle { color: var(--text-muted); font-size: 14px; margin: 0 0 20px 0; }
+  h1 { font-size: 24px; font-weight: 400; letter-spacing: -0.5px; margin: 0 0 5px 0; }
+  p.subtitle { color: var(--text-muted); font-size: 14px; margin: 0 0 25px 0; }
   
   .card {
     background-color: var(--card-color);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
   }
 
   /* Input Screen */
   textarea {
     width: 100%;
     background-color: var(--card-color);
-    border: 1px solid var(--border);
+    border: 1px solid #FFFFFF;
     color: var(--text-main);
-    border-radius: 12px;
-    padding: 15px;
+    border-radius: 4px;
+    padding: 20px;
     min-height: 140px;
     resize: none;
     font-size: 14px;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
   }
   .demo-label {
-    font-size: 12px; color: var(--text-muted); font-weight: bold; letter-spacing: 1px; margin-bottom: 10px;
+    font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase;
   }
   .btn {
     width: 100%;
-    padding: 15px;
-    border-radius: 8px;
-    border: none;
-    color: white;
-    font-weight: bold;
+    padding: 16px 20px;
+    border-radius: 4px;
+    border: 1px solid #FFFFFF;
+    background-color: var(--card-color);
+    color: #FFFFFF;
+    font-weight: 500;
     font-size: 14px;
     cursor: pointer;
     margin-bottom: 12px;
     text-align: center;
+    letter-spacing: 0.5px;
+    transition: background-color 0.2s;
   }
-  .btn-primary { background-color: var(--primary); }
-  .btn-warning { background-color: var(--warning); color: #000; }
-  .btn-success { background-color: var(--success); color: #000; }
-  .btn-outline { background-color: transparent; border: 1px solid var(--border); color: var(--text-main); }
+  .btn:hover { background-color: rgba(255,255,255,0.05); }
+  
+  .btn-primary, .btn-warning, .btn-success, .btn-outline {
+    background-color: var(--card-color);
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+  }
 
   /* Insights Screen */
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-  .chip { background-color: rgba(108, 92, 231, 0.2); border: 1px solid var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; }
-  .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-  .card-title { font-weight: bold; font-size: 16px; flex: 1; margin-right: 10px; }
-  .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; border: 1px solid transparent; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+  .chip { background-color: var(--card-color); border: 1px solid var(--border); padding: 6px 14px; border-radius: 4px; font-size: 11px; font-weight: 500; color: var(--text-main); }
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .card-title { font-weight: 600; font-size: 16px; flex: 1; margin-right: 10px; }
+  .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; border: 1px solid var(--border); background-color: var(--bg-color); color: var(--text-main); }
   
-  .badge-high { border-color: var(--error); color: var(--error); background-color: rgba(255, 71, 87, 0.1); }
-  .badge-medium { border-color: var(--warning); color: var(--warning); background-color: rgba(255, 170, 0, 0.1); }
-  .badge-low { border-color: var(--success); color: var(--success); background-color: rgba(0, 214, 143, 0.1); }
+  .badge-high, .badge-medium, .badge-low { 
+    border-color: var(--border); color: var(--text-main); background-color: var(--bg-color); 
+  }
 
-  .confidence-wrap { margin: 15px 0; }
-  .confidence-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-  .progress-bg { height: 6px; background-color: var(--border); border-radius: 3px; overflow: hidden; }
-  .progress-fill { height: 100%; background-color: var(--primary); }
+  .confidence-wrap { margin: 20px 0; }
+  .confidence-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
+  .progress-bg { height: 4px; background-color: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background-color: #FFFFFF; }
 
-  .impact-box { background-color: #222633; border-left: 3px solid var(--warning); padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 13px;}
-  .impact-lbl { color: var(--text-muted); font-size: 10px; text-transform: uppercase; margin-bottom: 2px;}
+  .impact-box { background-color: var(--bg-color); border-left: 2px solid #FFFFFF; padding: 15px; border-radius: 4px; margin-top: 15px; font-size: 13px;}
+  .impact-lbl { color: var(--text-muted); font-size: 10px; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;}
 
   /* Action Plan Screen */
-  .p-badge { height: 28px; width: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; color: white; margin-right: 12px;}
-  .meta-grid { display: flex; gap: 10px; margin: 12px 0; }
-  .meta-box { flex: 1; background-color: #222633; padding: 8px; border-radius: 6px; border: 1px solid var(--border); }
-  .meta-lbl { font-size: 9px; color: var(--text-muted); }
-  .meta-val { font-size: 13px; font-weight: bold; }
-  .team-wrap { display: flex; align-items: center; }
+  .p-badge { height: 28px; width: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; color: var(--bg-color); background-color: #FFFFFF; margin-right: 12px;}
+  .meta-grid { display: flex; gap: 12px; margin: 16px 0; }
+  .meta-box { flex: 1; background-color: var(--bg-color); padding: 12px; border-radius: 4px; border: 1px solid var(--border); }
+  .meta-lbl { font-size: 9px; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 4px;}
+  .meta-val { font-size: 13px; font-weight: 600; color: var(--text-main); }
+  .team-wrap { display: flex; align-items: center; margin-top: 10px;}
 
   /* Outcome Screen */
-  .table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);}
-  .table th { background-color: #222633; text-align: left; padding: 10px; color: var(--text-muted); font-size: 9px;}
-  .table td { padding: 10px; border-top: 1px solid var(--border); background-color: var(--card-color);}
-  .table tr.alt td { background-color: rgba(26, 29, 39, 0.5); }
-  .table .exp { font-size: 10px; color: var(--text-muted); font-style: italic; padding: 4px 10px 10px; border-top: none; }
+  .table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 12px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border);}
+  .table th { background-color: var(--bg-color); text-align: left; padding: 12px; color: var(--text-muted); font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border);}
+  .table td { padding: 12px; border-bottom: 1px solid var(--border); background-color: var(--card-color);}
+  .table tr:last-child td { border-bottom: none; }
+  .table tr.alt td { background-color: var(--bg-color); }
+  .table .exp { font-size: 11px; color: var(--text-muted); padding: 8px 12px 16px; border-top: none; }
   
-  .ledger { background-color: #0A0C10; border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 10px; margin-bottom: 20px;}
-  .lg-time { color: var(--primary); }
-  .lg-act { color: white; }
-  .lg-res { color: var(--text-muted); margin-bottom: 10px; display: block;}
+  .ledger { background-color: var(--bg-color); border: 1px solid var(--border); border-radius: 4px; padding: 15px; font-family: monospace; font-size: 11px; margin-bottom: 25px; line-height: 1.5;}
+  .lg-time { color: var(--text-muted); }
+  .lg-act { color: #FFFFFF; font-weight: bold;}
+  .lg-res { color: var(--text-muted); margin-bottom: 12px; display: block;}
 
   .dev-fab {
     position: absolute;
@@ -202,12 +209,87 @@
     border-radius: 6px;
     margin-bottom: 15px;
   }
+
+  /* Premium Header & AI Overlay */
+  .header-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 80px;
+    padding: 35px 20px 10px;
+    background: rgba(26, 29, 39, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-main);
+  }
+  .back-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .back-btn.visible {
+    opacity: 1; pointer-events: auto;
+  }
+  .status-dot {
+    width: 10px; height: 10px;
+    background-color: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--success);
+  }
+  .ai-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--bg-color);
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+  }
+  .ai-overlay.active { display: flex; }
+  .ai-spinner {
+    width: 50px; height: 50px;
+    border: 4px solid var(--border);
+    border-top: 4px solid #FFFFFF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
 </style>
 </head>
 <body>
 
 <div class="mobile-frame">
   <div class="notch"></div>
+
+  <!-- HEADER BAR -->
+  <div class="header-bar">
+    <div class="back-btn" id="back-btn" onclick="goBack()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </div>
+    <div class="header-title">ActionFlow AI</div>
+    <div class="status-dot"></div>
+  </div>
+
+  <!-- AI OVERLAY -->
+  <div id="ai-overlay" class="ai-overlay">
+    <div class="ai-spinner"></div>
+  </div>
 
   <!-- SCREEN 1: INPUT -->
   <div id="screen1" class="screen active">
@@ -229,7 +311,7 @@
     <div class="chips" id="ins-chips"></div>
     <div id="ins-cards"></div>
     <div style="margin-top: auto; padding-top: 20px;">
-      <button class="btn btn-primary" onclick="nav('screen3')">Generate Action Optimization Matrix</button>
+      <button class="btn btn-primary" onclick="navWithLoading('screen3')">Generate Action Optimization Matrix</button>
     </div>
   </div>
 
@@ -239,14 +321,14 @@
     <p class="subtitle">Prioritized Recommended Actions</p>
     <div id="act-cards"></div>
     <div style="margin-top: auto; padding-top: 20px;">
-      <button class="btn btn-primary" onclick="nav('screen4')">Execute Selected Action Items</button>
+      <button class="btn btn-primary" onclick="navWithLoading('screen4')">Execute Selected Action Items</button>
     </div>
   </div>
 
   <!-- SCREEN 4: OUTCOME -->
   <div id="screen4" class="screen">
     <h1>Execution Simulator</h1>
-    <p class="subtitle" style="color: var(--success); letter-spacing: 1px;">STATE DELTA ANALYSIS</p>
+    <p class="subtitle" style="color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">STATE DELTA ANALYSIS</p>
     
     <table class="table" id="out-table">
       <thead>
@@ -368,18 +450,48 @@ const SCENARIOS = {
 };
 
 let activeData = null;
+let currentScreenId = 'screen1';
+
+function navWithLoading(screenId) {
+  const overlay = document.getElementById('ai-overlay');
+  overlay.classList.add('active');
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    nav(screenId);
+  }, 1000);
+}
 
 function nav(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
+  currentScreenId = screenId;
+  
+  const backBtn = document.getElementById('back-btn');
+  if(screenId === 'screen1') {
+    backBtn.classList.remove('visible');
+  } else {
+    backBtn.classList.add('visible');
+  }
+}
+
+function goBack() {
+  if (currentScreenId === 'screen4') nav('screen3');
+  else if (currentScreenId === 'screen3') nav('screen2');
+  else if (currentScreenId === 'screen2') resetApp();
 }
 
 function runScenario(type) {
+  const overlay = document.getElementById('ai-overlay');
+  overlay.classList.add('active');
   activeData = SCENARIOS[type];
-  buildScreen2();
-  buildScreen3();
-  buildScreen4();
-  nav('screen2');
+  
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    buildScreen2();
+    buildScreen3();
+    buildScreen4();
+    nav('screen2');
+  }, 1500);
 }
 
 function buildScreen2() {
@@ -409,8 +521,8 @@ function buildScreen2() {
           <div class="impact-lbl">Consequence:</div>
           <div style="margin-bottom:8px;">${ia.business_consequence}</div>
           <div style="display:flex;">
-            <div style="flex:1"><div class="impact-lbl">Est. Impact:</div><div style="color:var(--primary); font-weight:bold;">${ia.estimated_loss_or_gain}</div></div>
-            <div style="flex:1"><div class="impact-lbl">Timeframe:</div><div>${ia.time_sensitivity}</div></div>
+            <div style="flex:1"><div class="impact-lbl">Est. Impact:</div><div style="color:#FFFFFF; font-weight:bold;">${ia.estimated_loss_or_gain}</div></div>
+            <div style="flex:1"><div class="impact-lbl">Timeframe:</div><div style="color:#FFFFFF; font-weight:bold;">${ia.time_sensitivity}</div></div>
           </div>
         </div>` : ''}
       </div>
@@ -421,18 +533,17 @@ function buildScreen2() {
 function buildScreen3() {
   const cards = document.getElementById('act-cards');
   cards.innerHTML = activeData.actions.recommendations.map((a, idx) => {
-    const pColor = a.priority === 1 ? 'var(--error)' : (a.priority === 2 ? 'var(--warning)' : 'var(--primary)');
-    const bColor = idx === 0 ? 'border-color: var(--primary); border-width: 2px;' : '';
+    const bColor = idx === 0 ? 'border-color: #FFFFFF; border-width: 1px;' : '';
     return `
       <div class="card" style="${bColor}">
         <div class="card-header" style="align-items:center;">
-          <div class="p-badge" style="background-color:${pColor}">P${a.priority}</div>
+          <div class="p-badge">P${a.priority}</div>
           <div class="card-title" style="margin:0;">${a.title}</div>
         </div>
         <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">${a.expected_outcome}</p>
         <div class="meta-grid">
-          <div class="meta-box"><div class="meta-lbl">BUDGET</div><div class="meta-val" style="color:var(--warning)">${a.budget_estimate}</div></div>
-          <div class="meta-box"><div class="meta-lbl">DEADLINE</div><div class="meta-val" style="color:var(--success)">${a.deadline}</div></div>
+          <div class="meta-box"><div class="meta-lbl">BUDGET</div><div class="meta-val">${a.budget_estimate}</div></div>
+          <div class="meta-box"><div class="meta-lbl">DEADLINE</div><div class="meta-val">${a.deadline}</div></div>
         </div>
         <div class="team-wrap">
           <span style="font-size:10px; color:var(--text-muted); margin-right:8px;">OWNERSHIP:</span>
@@ -458,7 +569,7 @@ function buildScreen4() {
         <td style="color:var(--text-muted);">${o.metric}</td>
         <td style="font-weight:bold;">${o.before_value}</td>
         <td style="font-weight:bold; color:white;">${o.after_value}</td>
-        <td style="font-weight:bold; text-align:right; color:${color}">${o.change_pct}</td>
+        <td style="font-weight:bold; text-align:right; color:#FFFFFF">${o.change_pct}</td>
       </tr>
       <tr ${alt}>
         <td colspan="4" class="exp">↳ ${o.explanation}</td>
@@ -473,7 +584,7 @@ function buildScreen4() {
       <span class="lg-act">EXECUTING: ${s.action_title}</span><br/>
       <span class="lg-res">STATUS: ${s.status} | RESPONSE: ${s.mock_response}</span>
     </div>
-  `).join('') + `<span style="color:var(--success); animation: blink 1s infinite;">█</span>`;
+  `).join('') + `<span style="color:#FFFFFF; animation: blink 1s infinite;">█</span>`;
 }
 
 function resetApp() {
