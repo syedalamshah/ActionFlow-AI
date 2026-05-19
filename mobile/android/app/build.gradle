@@ -1,6 +1,21 @@
-apply plugin: "com.android.application"
-apply plugin: "org.jetbrains.kotlin.android"
-apply plugin: "com.facebook.react"
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.facebook.react'
+    id 'org.jetbrains.kotlin.plugin.compose' apply false
+}
+
+import com.android.build.gradle.tasks.ExternalNativeBuildJsonTask
+import groovy.json.JsonSlurper
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+// List of features that are required by linked modules
+def coreFeatures = project.findProperty("coreFeatures") ?: []
+ext.shouldIncludeCompose = coreFeatures.contains("compose")
+
+if (shouldIncludeCompose) {
+    apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+}
 
 /**
  * This is the configuration block to customize your React Native Android app.

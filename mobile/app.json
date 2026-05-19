@@ -1,4 +1,9 @@
 {
   "name": "ActionFlowAI",
-  "displayName": "ActionFlowAI"
+  "displayName": "ActionFlowAI",
+  "extra": {
+    "eas": {
+      "projectId": "6a050229-723c-4568-8a00-ce8f02d45197"
+    }
+  }
 }
