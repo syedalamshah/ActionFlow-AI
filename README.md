@@ -111,6 +111,39 @@ git push --force origin main
 - **Do not commit secrets:** Keep `backend/.env` listed in `.gitignore` and use `backend/.env.example` as the template in the repo.
 - **Secret scanning:** Run a local secret scan before publishing, e.g. `gitleaks detect` or GitHub's secret scanning alerts.
 
+### Local dev helper
+
+- A local helper script is included at `backend/run_pipeline_test.py` to run the sample input through the full pipeline (extract→insights→impact→actions→execute). It reads `BACKEND_API_KEY` and `GEMINI_API_KEY` from `backend/.env` or the environment via `python-dotenv`.
+- `backend/.env` is ignored by Git; do NOT commit it. Example local `.env` contents:
+
+```
+GEMINI_API_KEY=REPLACE_WITH_YOUR_GEMINI_KEY
+BACKEND_API_KEY=REPLACE_WITH_A_RANDOM_SECRET
+RATE_LIMIT_WINDOW=60
+RATE_LIMIT_MAX=60
+```
+
+Run the test script after starting the backend server:
+
+```bash
+cd backend
+python -m pip install -r requirements.txt   # ensure requests and python-dotenv are installed
+python run_pipeline_test.py
+```
+
+---
+
+## Finalization & Submission Checklist
+
+- `index.html` is submission-ready and will run offline using `mockPayloads.js` if the backend is unavailable. Demo buttons now prefer the live backend but fall back to offline mocks.
+- `backend/.env` is ignored by Git and now contains placeholder values. DO NOT commit real secrets.
+- **Action required before publishing:** rotate your Gemini API key in the provider console and update `backend/.env` with the new `GEMINI_API_KEY`. Treat any previously exposed key as compromised.
+- Run a final secret scan (e.g. `gitleaks detect`) before publishing the repository.
+- If you want me to purge any leaked secret from git history, I can prepare and run the history-rewrite (this rewrites commits and requires force-push and collaborator coordination).
+
+If you'd like, I can also create a release ZIP containing `index.html` and the minimal `README` for submission (without any backend secrets). Say the word and I'll produce it.
+
+
 ## Secure Publishing & CI Secrets
 
 - **CI Secrets Usage:** Store sensitive keys in your CI provider and reference them at runtime. For GitHub Actions, add the secret via the repository Settings → Secrets → Actions, then reference it in workflows:
